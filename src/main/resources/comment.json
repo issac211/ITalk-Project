@@ -1,0 +1,66 @@
+{
+  "1": {
+    "id": 1,
+    "postId": 1,
+    "userName": "BreakfastBoss",
+    "content": "Cereal first, obviously. Who even does milk first?!",
+    "timestamp": 1740753337113,
+    "isEdited": false
+  },
+  "2": {
+    "id": 2,
+    "postId": 1,
+    "userName": "MilkOverlord",
+    "content": "Milk first! The cereal-to-milk ratio stays perfect!",
+    "timestamp": 1740753456789,
+    "isEdited": false
+  },
+  "3": {
+    "id": 3,
+    "postId": 2,
+    "userName": "NightOwlCoder",
+    "content": "It\u0027s because your brain enters \u0027big brain mode\u0027 at 3 AM.",
+    "timestamp": 1740755678901,
+    "isEdited": false
+  },
+  "4": {
+    "id": 4,
+    "postId": 2,
+    "userName": "DebuggerDude",
+    "content": "Your code is haunted. Try sacrificing a rubber duck to the debugging gods.",
+    "timestamp": 1740756789012,
+    "isEdited": false
+  },
+  "5": {
+    "id": 5,
+    "postId": 3,
+    "userName": "TimeTraveler",
+    "content": "Congratulations, you have entered the Nap Time Warp. There is no escape.",
+    "timestamp": 1740757890123,
+    "isEdited": false
+  },
+  "6": {
+    "id": 6,
+    "postId": 4,
+    "userName": "FelineWhisperer",
+    "content": "Your cat is definitely plotting. Watch out for sudden \u0027accidental\u0027 trips.",
+    "timestamp": 1740758901234,
+    "isEdited": false
+  },
+  "7": {
+    "id": 7,
+    "postId": 4,
+    "userName": "ConspiracyCarl",
+    "content": "She just knocked a glass off the table while making eye contact. It\u0027s official.",
+    "timestamp": 1740759012345,
+    "isEdited": false
+  },
+  "8": {
+    "id": 8,
+    "postId": 5,
+    "userName": "SnackMaster",
+    "content": "Doritos + Mountain Dew. The classic. Unbeatable.",
+    "timestamp": 1740759123456,
+    "isEdited": false
+  }
+}
