@@ -6,6 +6,7 @@ import com.hit.service.CommentService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The CommentController exposes API endpoints for operations on Comments.
@@ -19,50 +20,79 @@ public class CommentController {
     }
 
     /**
-     * Creates a new comment.
+     * <h5> Creates a new comment based on the provided request body. </h5>
+     * This method extracts the `postId`, `userName`, and `content` from the given
+     * request body map and delegates the comment creation process to the `commentService`.
      *
-     * @param postId   the ID of the post to which the comment belongs.
-     * @param userName the username of the comment creator.
-     * @param content  the text content of the comment.
-     * @throws IOException if an I/O error occurs.
+     * @param requestBody a map containing the comment details:<br>
+     *                    <ul>
+     *                      <li> "postId": the ID of the post to which the comment belongs (Long) </li>
+     *                      <li> "userName": the username of the comment creator (String) </li>
+     *                      <li> "content": the text content of the comment (String) </li>
+     *                    </ul>
+     * @throws IOException if an I/O error occurs during saving
      */
-    public void createComment(Long postId, String userName, String content) throws IOException {
+    public void createComment(Map<String, Object> requestBody) throws IOException {
+        long postId = getLongFromBody(requestBody, "postId");
+        String userName = (String) requestBody.get("userName");
+        String content = (String) requestBody.get("content");
         commentService.createComment(postId, userName, content);
     }
 
     /**
-     * Edits an existing comment.
+     * <h5> Edits an existing comment based on the provided request body. </h5>
+     * This method extracts the `commentId`, `userName`, and `content` from the given
+     * request body map and delegates the comment editing process to the `commentService`.
      *
-     * @param commentId the ID of the comment to edit.
-     * @param userName  the username of the editor.
-     * @param content   the new text content for the comment.
-     * @return true if the comment was edited successfully; false otherwise.
-     * @throws IOException if an I/O error occurs.
+     * @param requestBody a map containing the comment details:<br>
+     *                    <ul>
+     *                      <li> "commentId": the ID of the comment to edit (Long) </li>
+     *                      <li> "userName": the username of the editor (String) </li>
+     *                      <li> "content": the new text content for the comment (String) </li>
+     *                    </ul>
+     * @return true if the comment was edited successfully; false otherwise
+     * @throws IOException if an I/O error occurs during the operation
      */
-    public boolean editComment(Long commentId, String userName, String content) throws IOException {
+    public boolean editComment(Map<String, Object> requestBody) throws IOException {
+        long commentId = getLongFromBody(requestBody, "commentId");
+        String userName = (String) requestBody.get("userName");
+        String content = (String) requestBody.get("content");
         return commentService.editComment(commentId, userName, content);
     }
 
     /**
-     * Removes a comment.
+     * <h5> Removes a comment based on the provided request body. </h5>
+     * This method extracts the `commentId` and `userName` from the given
+     * request body map and delegates the comment removal process to the `commentService`.
      *
-     * @param commentId the ID of the comment to remove.
-     * @param userName  the username of the requester.
-     * @return true if the comment was removed successfully; false otherwise.
-     * @throws IOException if an I/O error occurs.
+     * @param requestBody a map containing the comment details:<br>
+     *                    <ul>
+     *                      <li> "commentId": the ID of the comment to remove (Long) </li>
+     *                      <li> "userName": the username of the requester (String) </li>
+     *                    </ul>
+     * @return true if the comment was removed successfully; false otherwise
+     * @throws IOException if an I/O error occurs during deletion
      */
-    public boolean removeComment(Long commentId, String userName) throws IOException {
+    public boolean removeComment(Map<String, Object> requestBody) throws IOException {
+        long commentId = getLongFromBody(requestBody, "commentId");
+        String userName = (String) requestBody.get("userName");
         return commentService.removeComment(commentId, userName);
     }
 
     /**
-     * Retrieves a comment by its ID.
+     * <h5> Retrieves a comment by its ID from the provided request body. </h5>
+     * This method extracts the `commentId` from the given request body map
+     * and delegates the retrieval process to the `commentService`.
      *
-     * @param commentId the ID of the comment.
-     * @return the Comment object, or null if not found.
+     * @param requestBody a map containing the comment details:<br>
+     *                    <ul>
+     *                      <li> "commentId": the ID of the comment to retrieve (Long) </li>
+     *                    </ul>
+     * @return the Comment object with the specified ID, or null if not found.
      * @throws IOException if an I/O error occurs.
      */
-    public Comment getCommentById(Long commentId) throws IOException {
+    public Comment getCommentById(Map<String, Object> requestBody) throws IOException {
+        long commentId = getLongFromBody(requestBody, "commentId");
         return commentService.getCommentById(commentId);
     }
 
@@ -77,13 +107,33 @@ public class CommentController {
     }
 
     /**
-     * Searches the contents of comments for a given search pattern.
+     * <h5> Searches the contents of comments for a given search pattern. </h5>
+     * This method retrieves the search pattern from the request body and
+     * delegates the search operation to the `commentService`.
      *
-     * @param searchPattern the pattern to search for.
-     * @return a SearchResult containing comments and the matching indexes.
-     * @throws IOException if an I/O error occurs.
+     * @param requestBody a map containing the search details:<br>
+     *                    <ul>
+     *                      <li> "searchPattern": the pattern to search for in comment contents (String) </li>
+     *                    </ul>
+     * @return a `SearchResult` containing comments whose contents match the search pattern
+     * @throws IOException if an I/O error occurs during the search
      */
-    public SearchResult<Comment> searchContents(String searchPattern) throws IOException {
+    public SearchResult<Comment> searchContents(Map<String, Object> requestBody) throws IOException {
+        String searchPattern = (String) requestBody.get("searchPattern");
         return commentService.stringMatchingSearchContents(searchPattern);
+    }
+
+    private long getLongFromBody(Map<String, Object> body, String paramName) {
+        Object paramObj = body.get(paramName);
+        long paramLong;
+        if (paramObj instanceof Number) {
+            paramLong = ((Number) paramObj).longValue();
+        } else if (paramObj instanceof String) {
+            paramLong = Long.parseLong((String) paramObj);
+        } else {
+            throw new IllegalArgumentException("Invalid type for " + paramName + ": " + paramObj);
+        }
+
+        return paramLong;
     }
 }

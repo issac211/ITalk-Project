@@ -66,40 +66,23 @@ public class HandleRequest implements Runnable {
                         try {
                             switch (methodAction) {
                                 case "create" -> {
-                                    String userName = (String) body.get("userName");
-                                    String password = (String) body.get("password");
-                                    String roleStr = (String) body.get("role");
-                                    boolean result = userController.createUser(userName, password,
-                                            User.Role.valueOf(roleStr.toUpperCase()));
+                                    boolean result = userController.createUser(body);
                                     response = new Response(200, Map.of("result", result));
                                 }
                                 case "edit" -> {
-                                    String editorName = (String) body.get("editorName");
-                                    String userName = (String) body.get("userName");
-                                    String oldPassword = (String) body.get("oldPassword");
-                                    String newPassword = (String) body.get("newPassword");
-                                    String newRole = (String) body.get("newRole");
-                                    boolean result = userController.editUser(editorName, userName, oldPassword,
-                                            newPassword, User.Role.valueOf(newRole.toUpperCase()));
+                                    boolean result = userController.editUser(body);
                                     response = new Response(200, Map.of("result", result));
                                 }
                                 case "remove" -> {
-                                    String removerName = (String) body.get("removerName");
-                                    String userName = (String) body.get("userName");
-                                    String password = (String) body.get("password");
-                                    boolean result = userController.removeUser(removerName, userName, password);
+                                    boolean result = userController.removeUser(body);
                                     response = new Response(200, Map.of("result", result));
                                 }
                                 case "authenticate" -> {
-                                    String userName = (String) body.get("userName");
-                                    String password = (String) body.get("password");
-                                    boolean result = userController.authenticate(userName, password);
+                                    boolean result = userController.authenticate(body);
                                     response = new Response(200, Map.of("result", result));
                                 }
                                 case "get" -> {
-                                    String userName = (String) body.get("userName");
-                                    String password = (String) body.get("password");
-                                    User userResult = userController.getUser(userName, password);
+                                    User userResult = userController.getUser(body);
                                     if (userResult == null) {
                                         response = new Response(404, Map.of("error", "User Not Found"));
                                     } else {
@@ -121,29 +104,19 @@ public class HandleRequest implements Runnable {
                         try {
                             switch (methodAction) {
                                 case "create" -> {
-                                    String title = (String) body.get("title");
-                                    String userName = (String) body.get("userName");
-                                    String content = (String) body.get("content");
-                                    postController.createPost(title, userName, content);
+                                    postController.createPost(body);
                                     response = new Response(200, Map.of("result", "Post created successfully"));
                                 }
                                 case "edit" -> {
-                                    long postId = getLongFromBody(body, "postId");
-                                    String title = (String) body.get("title");
-                                    String userName = (String) body.get("userName");
-                                    String content = (String) body.get("content");
-                                    boolean result = postController.editPost(postId, title, userName, content);
+                                    boolean result = postController.editPost(body);
                                     response = new Response(200, Map.of("result", result));
                                 }
                                 case "remove" -> {
-                                    long postId = getLongFromBody(body, "postId");
-                                    String userName = (String) body.get("userName");
-                                    boolean result = postController.removePost(postId, userName);
+                                    boolean result = postController.removePost(body);
                                     response = new Response(200, Map.of("result", result));
                                 }
                                 case "get" -> {
-                                    long postId = getLongFromBody(body, "postId");
-                                    Post postResult = postController.getPostById(postId);
+                                    Post postResult = postController.getPostById(body);
                                     if (postResult == null) {
                                         response = new Response(404, Map.of("error", "Post Not Found"));
                                     } else {
@@ -155,18 +128,15 @@ public class HandleRequest implements Runnable {
                                     response = new Response(200, Map.of("result", posts));
                                 }
                                 case "get-comments" -> {
-                                    long postId = getLongFromBody(body, "postId");
-                                    List<Comment> comments = postController.getPostComments(postId);
+                                    List<Comment> comments = postController.getPostComments(body);
                                     response = new Response(200, Map.of("result", comments));
                                 }
                                 case "search-titles" -> {
-                                    String searchPattern = (String) body.get("searchPattern");
-                                    SearchResult<Post> searchResult = postController.searchTitles(searchPattern);
+                                    SearchResult<Post> searchResult = postController.searchTitles(body);
                                     response = new Response(200, Map.of("result", searchResult));
                                 }
                                 case "search-contents" -> {
-                                    String searchPattern = (String) body.get("searchPattern");
-                                    SearchResult<Post> searchResult = postController.searchContents(searchPattern);
+                                    SearchResult<Post> searchResult = postController.searchContents(body);
                                     response = new Response(200, Map.of("result", searchResult));
                                 }
                                 default -> response = new Response(
@@ -184,28 +154,19 @@ public class HandleRequest implements Runnable {
                         try {
                             switch (methodAction) {
                                 case "create" -> {
-                                    long postId = getLongFromBody(body, "postId");
-                                    String userName = (String) body.get("userName");
-                                    String content = (String) body.get("content");
-                                    commentController.createComment(postId, userName, content);
+                                    commentController.createComment(body);
                                     response = new Response(200, Map.of("result", "Comment created successfully"));
                                 }
                                 case "edit" -> {
-                                    long commentId = getLongFromBody(body, "commentId");
-                                    String userName = (String) body.get("userName");
-                                    String content = (String) body.get("content");
-                                    boolean result = commentController.editComment(commentId, userName, content);
+                                    boolean result = commentController.editComment(body);
                                     response = new Response(200, Map.of("result", result));
                                 }
                                 case "remove" -> {
-                                    long commentId = getLongFromBody(body, "commentId");
-                                    String userName = (String) body.get("userName");
-                                    boolean result = commentController.removeComment(commentId, userName);
+                                    boolean result = commentController.removeComment(body);
                                     response = new Response(200, Map.of("result", result));
                                 }
                                 case "get" -> {
-                                    long commentId = getLongFromBody(body, "commentId");
-                                    Comment commentResult = commentController.getCommentById(commentId);
+                                    Comment commentResult = commentController.getCommentById(body);
                                     if (commentResult == null) {
                                         response = new Response(404, Map.of("error", "Comment Not Found"));
                                     } else {
@@ -217,8 +178,7 @@ public class HandleRequest implements Runnable {
                                     response = new Response(200, Map.of("result", comments));
                                 }
                                 case "search-contents" -> {
-                                    String searchPattern = (String) body.get("searchPattern");
-                                    SearchResult<Comment> searchResult = commentController.searchContents(searchPattern);
+                                    SearchResult<Comment> searchResult = commentController.searchContents(body);
                                     response = new Response(200, Map.of("result", searchResult));
                                 }
                                 default -> response = new Response(
